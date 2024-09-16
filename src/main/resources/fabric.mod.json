@@ -1,0 +1,33 @@
+{
+    "schemaVersion": 1,
+    "id": "pingables",
+    "version": "${version}",
+    "name": "Pingables",
+    "description": "TODO",
+    "authors": [
+        "Choco"
+    ],
+    "license": "MIT",
+    "icon": "assets/pingables/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "wtf.choco.pingables.PingablesEntryPointCommon"
+        ],
+        "client": [
+            "wtf.choco.pingables.client.PingablesEntryPointClient"
+        ]
+    },
+    "mixins": [
+        {
+            "config": "pingables.client.mixins.json",
+            "environment": "client"
+        }
+    ],
+    "depends": {
+        "fabricloader": ">=0.16.2",
+        "minecraft": "~1.21",
+        "java": ">=21",
+        "fabric-api": "*"
+    }
+}
