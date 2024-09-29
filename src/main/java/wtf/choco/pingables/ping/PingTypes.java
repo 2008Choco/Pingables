@@ -1,6 +1,7 @@
 package wtf.choco.pingables.ping;
 
 import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import wtf.choco.pingables.PingablesMod;
@@ -15,7 +16,7 @@ public final class PingTypes {
         ResourceLocation key = ResourceLocation.tryBuild(PingablesMod.MODID, id);
         ResourceLocation assetLocation = ResourceLocation.tryBuild(PingablesMod.MODID, "icons/" + id + ".png");
 
-        return Registry.register(PingablesRegistries.PING_TYPE, key, new PingType(assetLocation));
+        return Registry.register(PingablesRegistries.PING_TYPE, key, new PingType(assetLocation, Component.translatable("pingables.ping_type." + id)));
     }
 
     public static void bootstrap() { }
