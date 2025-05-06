@@ -1,10 +1,12 @@
 package wtf.choco.pingables.client.render;
 
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 import org.joml.Matrix4f;
@@ -12,32 +14,39 @@ import org.joml.Quaternionf;
 import org.joml.Vector4f;
 
 import wtf.choco.pingables.PingablesMod;
+import wtf.choco.pingables.client.PingablesModClient;
 import wtf.choco.pingables.client.mixin.GameRendererAccessor;
 import wtf.choco.pingables.ping.PositionedPing;
 
-public final class PingIconRenderer {
+public final class IdentifiedLayerPingIcon implements IdentifiedLayer {
 
     private static final int ICON_SIZE = 16;
 
-    private final PingablesMod mod;
+    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(PingablesMod.MODID, "ping_icon");
 
-    public PingIconRenderer(PingablesMod mod) {
+    private final PingablesModClient mod;
+
+    public IdentifiedLayerPingIcon(PingablesModClient mod) {
         this.mod = mod;
-
-        HudRenderCallback.EVENT.register(this::renderToHUD);
     }
 
-    private void renderToHUD(GuiGraphics graphics, DeltaTracker delta) {
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, DeltaTracker delta) {
         Minecraft minecraft = Minecraft.getInstance();
         Camera camera = minecraft.gameRenderer.getMainCamera();
-        double fov = ((GameRendererAccessor) minecraft.gameRenderer).invokeGetFov(camera, delta.getGameTimeDeltaPartialTick(true), true);
+        float fov = ((GameRendererAccessor) minecraft.gameRenderer).invokeGetFov(camera, delta.getGameTimeDeltaPartialTick(true), true);
 
         for (PositionedPing ping : mod.getPingTracker().getPings()) {
             this.renderIcon(minecraft, graphics, ping, camera, fov);
         }
     }
 
-    private void renderIcon(Minecraft minecraft, GuiGraphics graphics, PositionedPing ping, Camera camera, double fov) {
+    private void renderIcon(Minecraft minecraft, GuiGraphics graphics, PositionedPing ping, Camera camera, float fov) {
         double cameraX = camera.getPosition().x();
         double cameraY = camera.getPosition().y();
         double cameraZ = camera.getPosition().z();
@@ -87,7 +96,7 @@ public final class PingIconRenderer {
         int drawX = (int) Math.round(x - (ICON_SIZE / 2));
         int drawY = (int) Math.round(y - (ICON_SIZE / 2));
         // (texture, x, y, u, v, width, height, textureWidth, textureHeight)
-        graphics.blit(ping.type().getAssetLocation(), drawX, drawY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+        graphics.blit(RenderType::guiTextured, ping.type().getAssetLocation(), drawX, drawY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
     }
 
 }

@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface GameRendererAccessor {
 
     @Invoker("getFov")
-    public double invokeGetFov(Camera camera, float tickDelta, boolean bl);
+    public float invokeGetFov(Camera camera, float tickDelta, boolean bl);
 
 }

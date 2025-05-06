@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.phys.HitResult;
@@ -15,7 +17,7 @@ import org.lwjgl.glfw.GLFW;
 import wtf.choco.pingables.PingUtil;
 import wtf.choco.pingables.PingablesMod;
 import wtf.choco.pingables.client.network.ClientboundPayloadListener;
-import wtf.choco.pingables.client.render.PingIconRenderer;
+import wtf.choco.pingables.client.render.IdentifiedLayerPingIcon;
 import wtf.choco.pingables.network.payload.serverbound.ServerboundPingPayload;
 import wtf.choco.pingables.ping.PingType;
 import wtf.choco.pingables.ping.PingTypes;
@@ -29,12 +31,6 @@ public final class PingablesModClient extends PingablesMod {
             GLFW.GLFW_KEY_GRAVE_ACCENT,
             "category." + PingablesMod.MODID + ".ping"
     ));
-
-    private final PingIconRenderer pingIconRenderer;
-
-    public PingablesModClient() {
-        this.pingIconRenderer = new PingIconRenderer(this);
-    }
 
     public void initClient() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -52,14 +48,11 @@ public final class PingablesModClient extends PingablesMod {
             }
         });
 
+        HudLayerRegistrationCallback.EVENT.register(drawer -> drawer.attachLayerBefore(IdentifiedLayer.MISC_OVERLAYS, new IdentifiedLayerPingIcon(this)));
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> getPingTracker().clearPings());
 
         ClientboundPayloadListener payloadListener = new ClientboundPayloadListener(this);
         payloadListener.registerIncomingHandlers();
-    }
-
-    public PingIconRenderer getPingIconRenderer() {
-        return pingIconRenderer;
     }
 
 }

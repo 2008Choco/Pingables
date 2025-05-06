@@ -11,7 +11,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import wtf.choco.pingables.PingablesMod;
-import wtf.choco.pingables.ping.PingType;
 import wtf.choco.pingables.ping.PositionedPing;
 import wtf.choco.pingables.registry.PingablesRegistries;
 
@@ -28,12 +27,9 @@ public final record ClientboundSetPingPayload(ResourceLocation pingType, Vec3 po
 
     @Nullable
     public PositionedPing getPositionedPing() {
-        PingType pingType = PingablesRegistries.PING_TYPE.get(pingType());
-        if (pingType == null) {
-            return null;
-        }
-
-        return new PositionedPing(pingType, position, placedBy, timestamp);
+        return PingablesRegistries.PING_TYPE.get(pingType())
+                .<@Nullable PositionedPing>map(pingType -> new PositionedPing(pingType.value(), position, placedBy, timestamp))
+                .orElse(null);
     }
 
     private void write(FriendlyByteBuf buffer) {

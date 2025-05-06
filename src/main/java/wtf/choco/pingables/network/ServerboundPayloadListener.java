@@ -2,6 +2,7 @@ package wtf.choco.pingables.network;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -9,6 +10,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayPayloadHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -57,11 +59,12 @@ public final class ServerboundPayloadListener {
                 return;
             }
 
-            PingType pingType = PingablesRegistries.PING_TYPE.get(payload.pingType());
-            if (pingType == null) {
+            Optional<Holder.Reference<PingType>> possiblePingType = PingablesRegistries.PING_TYPE.get(payload.pingType());
+            if (possiblePingType.isEmpty()) {
                 return;
             }
 
+            PingType pingType = possiblePingType.get().value();
             Vec3 position = targetPosition.getLocation();
             UUID placedBy = context.player().getUUID();
             long timestamp = System.currentTimeMillis();
