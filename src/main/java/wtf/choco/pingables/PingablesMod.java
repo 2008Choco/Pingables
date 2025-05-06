@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import wtf.choco.pingables.network.ServerboundPayloadListener;
 import wtf.choco.pingables.network.payload.clientbound.ClientboundRemovePingPayload;
 import wtf.choco.pingables.ping.PingTracker;
-import wtf.choco.pingables.ping.PingTypes;
+import wtf.choco.pingables.registry.PingablesRegistries;
 
 public class PingablesMod {
 
@@ -25,7 +25,7 @@ public class PingablesMod {
     }
 
     public void initCommon() {
-        PingTypes.bootstrap();
+        PingablesRegistries.bootstrap();
 
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             if (!getPingTracker().removePing(handler.getOwner().getId())) {

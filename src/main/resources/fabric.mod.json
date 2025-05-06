@@ -11,6 +11,9 @@
     "icon": "assets/pingables/icon.png",
     "environment": "*",
     "entrypoints": {
+        "fabric-datagen": [
+            "wtf.choco.pingables.datagen.PingablesEntryPointDatagen"
+        ],
         "main": [
             "wtf.choco.pingables.PingablesEntryPointCommon"
         ],

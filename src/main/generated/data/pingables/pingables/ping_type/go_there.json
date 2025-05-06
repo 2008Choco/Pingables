@@ -1,0 +1,6 @@
+{
+  "name": {
+    "translate": "ping_type.pingables.go_there"
+  },
+  "texture_location": "pingables:icons/go_there.png"
+}

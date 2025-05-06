@@ -96,7 +96,7 @@ public final class IdentifiedLayerPingIcon implements IdentifiedLayer {
         int drawX = (int) Math.round(x - (ICON_SIZE / 2));
         int drawY = (int) Math.round(y - (ICON_SIZE / 2));
         // (texture, x, y, u, v, width, height, textureWidth, textureHeight)
-        graphics.blit(RenderType::guiTextured, ping.type().getAssetLocation(), drawX, drawY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+        graphics.blit(RenderType::guiTextured, ping.type().value().textureLocation(), drawX, drawY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
     }
 
 }

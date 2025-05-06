@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Registry;
 import net.minecraft.world.phys.HitResult;
 
 import org.lwjgl.glfw.GLFW;
@@ -22,6 +23,7 @@ import wtf.choco.pingables.network.payload.serverbound.ServerboundPingPayload;
 import wtf.choco.pingables.ping.PingType;
 import wtf.choco.pingables.ping.PingTypes;
 import wtf.choco.pingables.ping.PositionedPing;
+import wtf.choco.pingables.registry.PingablesRegistries;
 
 public final class PingablesModClient extends PingablesMod {
 
@@ -40,11 +42,13 @@ public final class PingablesModClient extends PingablesMod {
                     continue;
                 }
 
-                PingType pingType = Screen.hasShiftDown() ? PingTypes.HOME : PingTypes.GO_THERE;
-                PositionedPing ping = new PositionedPing(pingType, targetPosition.getLocation(), client.player.getUUID(), System.currentTimeMillis());
-                this.getPingTracker().addPing(ping);
+                Registry<PingType> registry = client.level.registryAccess().lookupOrThrow(PingablesRegistries.PING_TYPE);
+                registry.get(Screen.hasShiftDown() ? PingTypes.HOME : PingTypes.GO_THERE).ifPresent(pingType -> {
+                    PositionedPing ping = new PositionedPing(pingType, targetPosition.getLocation(), client.player.getUUID(), System.currentTimeMillis());
+                    this.getPingTracker().addPing(ping);
 
-                ClientPlayNetworking.send(new ServerboundPingPayload(pingType));
+                    ClientPlayNetworking.send(new ServerboundPingPayload(pingType));
+                });
             }
         });
 

@@ -1,0 +1,6 @@
+{
+  "name": {
+    "translate": "ping_type.pingables.home"
+  },
+  "texture_location": "pingables:icons/home.png"
+}

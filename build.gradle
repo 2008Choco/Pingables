@@ -9,6 +9,12 @@ base {
     archivesName = project.archives_base_name
 }
 
+fabricApi {
+    configureDataGeneration() {
+        client = true
+    }
+}
+
 loom {
     mods {
         "pingables" {
@@ -25,8 +31,9 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
+    outputs.upToDateWhen { false } // Always process resource properties
 
+    inputs.property "version", project.version
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
