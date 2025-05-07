@@ -28,11 +28,6 @@ public final class IdentifiedLayerPingIcon implements IdentifiedLayer {
     }
 
     @Override
-    public ResourceLocation id() {
-        return PingablesIdentifiedLayers.PING_ICON;
-    }
-
-    @Override
     public void render(GuiGraphics graphics, DeltaTracker delta) {
         Minecraft minecraft = Minecraft.getInstance();
         Camera camera = minecraft.gameRenderer.getMainCamera();
@@ -94,6 +89,11 @@ public final class IdentifiedLayerPingIcon implements IdentifiedLayer {
         int drawY = (int) Math.round(y - (ICON_SIZE / 2));
         // (texture, x, y, u, v, width, height, textureWidth, textureHeight)
         graphics.blit(RenderType::guiTextured, ping.type().value().textureLocation(), drawX, drawY, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return PingablesIdentifiedLayers.PING_ICON;
     }
 
 }

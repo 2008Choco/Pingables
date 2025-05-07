@@ -1,19 +1,9 @@
 package wtf.choco.pingables.client.input;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.Registry;
-import net.minecraft.world.phys.HitResult;
 
-import wtf.choco.pingables.PingUtil;
 import wtf.choco.pingables.client.PingablesModClient;
-import wtf.choco.pingables.network.payload.serverbound.ServerboundPingPayload;
-import wtf.choco.pingables.ping.PingType;
-import wtf.choco.pingables.ping.PingTypes;
-import wtf.choco.pingables.ping.PositionedPing;
-import wtf.choco.pingables.registry.PingablesRegistries;
 
 public final class PingKeyCallback implements ClientTickEvents.EndTick {
 
@@ -25,6 +15,19 @@ public final class PingKeyCallback implements ClientTickEvents.EndTick {
 
     @Override
     public void onEndTick(Minecraft client) {
+        if (client.screen != null) {
+            return;
+        }
+
+        if (PingablesKeyBindings.KEY_PING.isDown() && !mod.getPingTypeSelector().isVisible()) {
+            client.mouseHandler.releaseMouse();
+            this.mod.getPingTypeSelector().setVisible(true);
+        } else if (!PingablesKeyBindings.KEY_PING.isDown() && mod.getPingTypeSelector().isVisible()) {
+            client.mouseHandler.grabMouse();
+            this.mod.getPingTypeSelector().setVisible(false);
+        }
+
+        /*
         while (PingablesKeyBindings.KEY_PING.consumeClick()) {
             HitResult targetPosition = PingUtil.getTargetPosition(client.player);
             if (targetPosition == null || targetPosition.getType() == HitResult.Type.MISS) {
@@ -39,6 +42,7 @@ public final class PingKeyCallback implements ClientTickEvents.EndTick {
                 ClientPlayNetworking.send(new ServerboundPingPayload(pingType));
             });
         }
+        */
     }
 
 }
