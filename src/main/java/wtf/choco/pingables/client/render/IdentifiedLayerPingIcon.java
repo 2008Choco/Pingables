@@ -13,7 +13,6 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector4f;
 
-import wtf.choco.pingables.PingablesMod;
 import wtf.choco.pingables.client.PingablesModClient;
 import wtf.choco.pingables.client.mixin.GameRendererAccessor;
 import wtf.choco.pingables.ping.PositionedPing;
@@ -21,8 +20,6 @@ import wtf.choco.pingables.ping.PositionedPing;
 public final class IdentifiedLayerPingIcon implements IdentifiedLayer {
 
     private static final int ICON_SIZE = 16;
-
-    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(PingablesMod.MODID, "ping_icon");
 
     private final PingablesModClient mod;
 
@@ -32,7 +29,7 @@ public final class IdentifiedLayerPingIcon implements IdentifiedLayer {
 
     @Override
     public ResourceLocation id() {
-        return ID;
+        return PingablesIdentifiedLayers.PING_ICON;
     }
 
     @Override
