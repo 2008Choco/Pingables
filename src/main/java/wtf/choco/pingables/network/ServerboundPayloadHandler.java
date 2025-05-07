@@ -23,13 +23,13 @@ import wtf.choco.pingables.network.payload.clientbound.ClientboundSetPingPayload
 import wtf.choco.pingables.network.payload.serverbound.ServerboundPingPayload;
 import wtf.choco.pingables.ping.PositionedPing;
 
-public final class ServerboundPayloadListener {
+public final class ServerboundPayloadHandler {
 
     private boolean registered = false;
 
     private final PingablesMod mod;
 
-    public ServerboundPayloadListener(PingablesMod mod) {
+    public ServerboundPayloadHandler(PingablesMod mod) {
         this.mod = mod;
     }
 

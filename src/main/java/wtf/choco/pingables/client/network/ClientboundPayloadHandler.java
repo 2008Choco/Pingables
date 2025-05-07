@@ -7,11 +7,11 @@ import wtf.choco.pingables.network.payload.clientbound.ClientboundRemovePingPayl
 import wtf.choco.pingables.network.payload.clientbound.ClientboundSetPingPayload;
 import wtf.choco.pingables.ping.PositionedPing;
 
-public final class ClientboundPayloadListener {
+public final class ClientboundPayloadHandler {
 
     private final PingablesModClient mod;
 
-    public ClientboundPayloadListener(PingablesModClient mod) {
+    public ClientboundPayloadHandler(PingablesModClient mod) {
         this.mod = mod;
     }
 
