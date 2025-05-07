@@ -23,9 +23,11 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
     private static final int PING_TYPES_PER_PAGE = 8;
 
     private static final double RADIANS_PER_PING_TYPE = (Math.TAU / PING_TYPES_PER_PAGE);
-    private static final double INNER_RADIUS = 12.0;
+    private static final double INNER_RADIUS = 12;
     private static final double INNER_RADIUS_SQUARED = Mth.square(INNER_RADIUS);
-    private static final double ICON_RADIUS_FROM_CENTER = 50.0;
+    private static final double OUTER_RADIUS = 70;
+    private static final double OUTER_RADIUS_SQUARED = Mth.square(OUTER_RADIUS);
+    private static final double ICON_RADIUS_FROM_CENTER = (OUTER_RADIUS - INNER_RADIUS) / (Math.PI / 2);
 
     private static final double START_OFFSET_ANGLE = (-Math.PI / 2) + RADIANS_PER_PING_TYPE / 2;
 
@@ -60,7 +62,9 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
             Holder<PingType> pingType = idMap.byIdOrThrow(i);
 
             int size = PING_TYPE_ICON_SIZE;
-            if (currentMouseRadiusSquared >= INNER_RADIUS_SQUARED && currentMouseAngle >= currentAngle && currentMouseAngle <= (currentAngle + RADIANS_PER_PING_TYPE)) {
+            boolean isInWheel = (currentMouseRadiusSquared >= INNER_RADIUS_SQUARED && currentMouseRadiusSquared <= OUTER_RADIUS_SQUARED);
+            boolean isInCurrentSegment = (currentMouseAngle >= currentAngle && currentMouseAngle <= (currentAngle + RADIANS_PER_PING_TYPE));
+            if (isInWheel && isInCurrentSegment) {
                 currentlyHoveredPingType = pingType;
                 size = SELECTED_PING_TYPE_ICON_SIZE;
             }
