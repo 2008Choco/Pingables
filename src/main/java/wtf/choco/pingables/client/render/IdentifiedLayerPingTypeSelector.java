@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.IdMap;
 import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.Profiler;
@@ -22,7 +23,7 @@ import wtf.choco.pingables.registry.PingablesRegistries;
 public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
 
     private static final int PING_TYPE_ICON_SIZE = 18;
-    private static final int SELECTED_PING_TYPE_ICON_SIZE = 22;
+    private static final int HOVERED_PING_TYPE_ICON_SIZE = 22;
     private static final int PING_TYPES_PER_PAGE = 8;
 
     private static final float RADIANS_PER_PING_TYPE = (Mth.TWO_PI / PING_TYPES_PER_PAGE);
@@ -81,23 +82,30 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
         Registry<PingType> registry = minecraft.level.registryAccess().lookupOrThrow(PingablesRegistries.PING_TYPE);
         IdMap<Holder<PingType>> idMap = registry.asHolderIdMap();
 
-        double currentAngle = 0.0;
         int maxIterations = Math.min(PING_TYPES_PER_PAGE, idMap.size());
         Holder<PingType> currentlyHoveredPingType = null;
 
-        for (int i = 0; i < maxIterations; i++, currentAngle += RADIANS_PER_PING_TYPE) {
+        for (int i = 0; i < maxIterations; i++) {
             Holder<PingType> pingType = idMap.byIdOrThrow(i);
 
             int size = PING_TYPE_ICON_SIZE;
             if (i == hoveredPingTypeIndex) {
                 currentlyHoveredPingType = pingType;
-                size = SELECTED_PING_TYPE_ICON_SIZE;
+                size = HOVERED_PING_TYPE_ICON_SIZE;
             }
 
-            int x = Mth.floor(centerX + (Math.cos(START_OFFSET_ANGLE + currentAngle) * ICON_RADIUS_FROM_CENTER) - (size / 2));
-            int y = Mth.floor(centerY + (Math.sin(START_OFFSET_ANGLE + currentAngle) * ICON_RADIUS_FROM_CENTER) - (size / 2));
+            double angle = START_OFFSET_ANGLE + (i * RADIANS_PER_PING_TYPE);
+            int x = Mth.floor(centerX + (Math.cos(angle) * ICON_RADIUS_FROM_CENTER) - (size / 2));
+            int y = Mth.floor(centerY + (Math.sin(angle) * ICON_RADIUS_FROM_CENTER) - (size / 2));
 
             graphics.blit(RenderType::guiTextured, pingType.value().textureLocation(), x, y, 0, 0, size, size, size, size);
+        }
+
+        if (currentlyHoveredPingType != null) {
+            Component text = currentlyHoveredPingType.value().name();
+            int x = Mth.floor(centerX - (minecraft.font.width(text) / 2));
+            int y = Mth.floor(centerY + WHEEL_OUTER_RADIUS + minecraft.font.lineHeight);
+            graphics.drawString(minecraft.font, text, x, y, 0xFFFFFFFF);
         }
 
         Profiler.get().pop();
