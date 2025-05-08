@@ -1,5 +1,6 @@
 package wtf.choco.pingables.ping;
 
+import net.minecraft.Util;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -18,15 +19,15 @@ public final class PingTypes {
     }
 
     public static void bootstrap(BootstrapContext<PingType> context) {
-        context.register(GO_THERE, create(GO_THERE.location().getPath()));
-        context.register(HOME, create(HOME.location().getPath()));
+        context.register(GO_THERE, create(GO_THERE));
+        context.register(HOME, create(HOME));
     }
 
-    private static PingType create(String id) {
-        ResourceLocation textureLocation = ResourceLocation.tryBuild(PingablesMod.MODID, "icons/" + id + ".png");
+    private static PingType create(ResourceKey<PingType> key) {
+        ResourceLocation textureLocation = ResourceLocation.tryBuild(PingablesMod.MODID, "icons/" + key.location().getPath() + ".png");
         return PingType.builder()
                 .textureLocation(textureLocation)
-                .name(Component.translatable("ping_type.pingables." + id))
+                .name(Component.translatable(Util.makeDescriptionId("ping_type", key.location())))
                 .build();
     }
 
