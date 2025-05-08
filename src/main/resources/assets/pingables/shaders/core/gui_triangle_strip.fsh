@@ -1,6 +1,6 @@
 #version 150
 
-flat in vec4 vertexColor;
+flat in vec4 vertexColor; // Using "flat" here tells OpenGL not to interpolate colour between vertices
 
 uniform vec4 ColorModulator;
 
