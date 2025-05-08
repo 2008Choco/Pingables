@@ -89,8 +89,9 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
         int maxIterations = Math.min(PING_TYPES_PER_PAGE, registry.size());
         PingType currentlyHoveredPingType = null;
 
-        for (int i = page * PING_TYPES_PER_PAGE; i < maxIterations; i++) {
-            PingType pingType = registry.byId(i);
+        for (int i = 0; i < maxIterations; i++) {
+            int pageOffset = (page * PING_TYPES_PER_PAGE);
+            PingType pingType = registry.byId(i + pageOffset);
             if (pingType == null) {
                 break;
             }
