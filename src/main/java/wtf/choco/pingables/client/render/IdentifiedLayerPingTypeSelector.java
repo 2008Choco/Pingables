@@ -25,20 +25,16 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
     private static final int SELECTED_PING_TYPE_ICON_SIZE = 22;
     private static final int PING_TYPES_PER_PAGE = 8;
 
-    private static final double RADIANS_PER_PING_TYPE = (Math.TAU / PING_TYPES_PER_PAGE);
-    private static final double INNER_RADIUS = 12;
-    private static final double INNER_RADIUS_SQUARED = Mth.square(INNER_RADIUS);
-    private static final double OUTER_RADIUS = 70;
-    private static final double OUTER_RADIUS_SQUARED = Mth.square(OUTER_RADIUS);
-    private static final double ICON_RADIUS_FROM_CENTER = (OUTER_RADIUS - INNER_RADIUS) / (Math.PI / 2);
-
-    private static final double START_OFFSET_ANGLE = (-Math.PI / 2) + RADIANS_PER_PING_TYPE / 2;
+    private static final float RADIANS_PER_PING_TYPE = (Mth.TWO_PI / PING_TYPES_PER_PAGE);
+    private static final float START_OFFSET_ANGLE = -Mth.HALF_PI + (RADIANS_PER_PING_TYPE / 2);
 
     private static final int WHEEL_RESOLUTION = Mth.floor(PING_TYPES_PER_PAGE * 5); // How many vertices are used to generate the circle (must be a multiple of PING_TYPES_PER_PAGE)
     private static final float WHEEL_THETA = (Mth.TWO_PI / WHEEL_RESOLUTION);
+    private static final float ICON_RADIUS_FROM_CENTER = 40F;
     private static final float WHEEL_OUTER_RADIUS = 60F;
     private static final float WHEEL_INNER_RADIUS = 15F;
-    private static final int WHEEL_SEGMENT_HOVER_COLOR = 0x696969; // 0x43AB21;
+    private static final float WHEEL_INNER_RADIUS_SQUARED = Mth.square(WHEEL_INNER_RADIUS);
+    private static final float WHEEL_OUTER_RADIUS_SQUARED = Mth.square(WHEEL_OUTER_RADIUS);
 
     private static final HoverableRingWheelMesh WHEEL_MESH = new HoverableRingWheelMesh(
             WHEEL_RESOLUTION,
@@ -47,7 +43,7 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
             WHEEL_OUTER_RADIUS,
             PING_TYPES_PER_PAGE,
             0x000000,
-            WHEEL_SEGMENT_HOVER_COLOR
+            0x696969 // nice
     );
 
     private boolean visible = false;
@@ -132,7 +128,7 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
     }
 
     private boolean isMouseInWheel(double currentMouseRadiusSquared) {
-        return (currentMouseRadiusSquared >= INNER_RADIUS_SQUARED && currentMouseRadiusSquared <= OUTER_RADIUS_SQUARED);
+        return (currentMouseRadiusSquared >= WHEEL_INNER_RADIUS_SQUARED && currentMouseRadiusSquared <= WHEEL_OUTER_RADIUS_SQUARED);
     }
 
 }
