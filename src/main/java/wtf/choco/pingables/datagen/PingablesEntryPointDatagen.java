@@ -15,6 +15,7 @@ public final class PingablesEntryPointDatagen implements DataGeneratorEntrypoint
         Pack pack = generator.createPack();
 
         pack.addProvider(PingablesRegistryProvider::new);
+        pack.addProvider(PingablesLanguageProvider::new);
     }
 
     @Override
