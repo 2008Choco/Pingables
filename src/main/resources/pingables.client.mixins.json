@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [
-    "GameRendererAccessor"
+    "GameRendererAccessor",
+    "MouseHandlerMixin"
   ],
   "server": [],
   "injectors": {

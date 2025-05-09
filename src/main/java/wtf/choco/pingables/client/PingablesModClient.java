@@ -5,12 +5,17 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 
 import wtf.choco.pingables.PingablesMod;
+import wtf.choco.pingables.client.event.MouseEvent;
 import wtf.choco.pingables.client.events.ClientDisconnectFromServerCallback;
+import wtf.choco.pingables.client.events.MouseScrollPingWheelCallback;
 import wtf.choco.pingables.client.input.PingablesKeyBindings;
 import wtf.choco.pingables.client.network.ClientboundPayloadHandler;
 import wtf.choco.pingables.client.render.IdentifiedLayerPingIcon;
+import wtf.choco.pingables.client.render.IdentifiedLayerPingTypeSelector;
 
 public final class PingablesModClient extends PingablesMod {
+
+    private final IdentifiedLayerPingTypeSelector pingTypeSelector = new IdentifiedLayerPingTypeSelector();
 
     public void initClient() {
         // Bootstrap keybindings
@@ -23,12 +28,18 @@ public final class PingablesModClient extends PingablesMod {
         this.attachHudLayers();
 
         // Register client-sided event callbacks
+        MouseEvent.SCROLL.register(new MouseScrollPingWheelCallback(this));
         ClientPlayConnectionEvents.DISCONNECT.register(new ClientDisconnectFromServerCallback(this));
+    }
+
+    public IdentifiedLayerPingTypeSelector getPingTypeSelector() {
+        return pingTypeSelector;
     }
 
     private void attachHudLayers() {
         HudLayerRegistrationCallback.EVENT.register(drawer -> {
             drawer.attachLayerBefore(IdentifiedLayer.MISC_OVERLAYS, new IdentifiedLayerPingIcon(this));
+            drawer.attachLayerAfter(IdentifiedLayer.CHAT, pingTypeSelector);
         });
     }
 
