@@ -1,5 +1,6 @@
 package wtf.choco.pingables;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ public class PingablesMod {
         payloadListener.registerPayloads();
 
         // Register server-sided event callbacks
+        ServerTickEvents.END_SERVER_TICK.register(pingTracker::tickServer);
         ServerPlayConnectionEvents.DISCONNECT.register(new DisconnectFromServerCallback(this));
     }
 
