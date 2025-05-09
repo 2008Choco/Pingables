@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 
 import wtf.choco.pingables.PingablesMod;
-import wtf.choco.pingables.client.event.MouseEvent;
+import wtf.choco.pingables.client.event.RawInputEvent;
 import wtf.choco.pingables.client.events.ClientDisconnectFromServerCallback;
 import wtf.choco.pingables.client.events.MouseScrollPingWheelCallback;
 import wtf.choco.pingables.client.input.PingablesKeyBindings;
@@ -28,7 +28,7 @@ public final class PingablesModClient extends PingablesMod {
         this.attachHudLayers();
 
         // Register client-sided event callbacks
-        MouseEvent.SCROLL.register(new MouseScrollPingWheelCallback(this));
+        RawInputEvent.MOUSE_SCROLL.register(new MouseScrollPingWheelCallback(this));
         ClientPlayConnectionEvents.DISCONNECT.register(new ClientDisconnectFromServerCallback(this));
     }
 

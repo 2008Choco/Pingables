@@ -6,6 +6,8 @@
   "mixins": [],
   "client": [
     "GameRendererAccessor",
+    "KeyboardHandlerMixin",
+    "KeyMappingAccessor",
     "MouseHandlerMixin"
   ],
   "server": [],

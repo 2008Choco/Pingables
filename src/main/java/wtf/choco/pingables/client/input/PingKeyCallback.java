@@ -2,18 +2,26 @@ package wtf.choco.pingables.client.input;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.world.phys.HitResult;
 
 import wtf.choco.pingables.PingUtil;
 import wtf.choco.pingables.client.PingablesModClient;
+import wtf.choco.pingables.client.event.RawInputEvent;
 import wtf.choco.pingables.client.render.IdentifiedLayerPingTypeSelector;
 import wtf.choco.pingables.network.payload.serverbound.ServerboundPingPayload;
 import wtf.choco.pingables.ping.PingType;
+import wtf.choco.pingables.ping.PingTypes;
 import wtf.choco.pingables.ping.PositionedPing;
+import wtf.choco.pingables.registry.PingablesRegistries;
 
-public final class PingKeyCallback implements ClientTickEvents.EndTick {
+public final class PingKeyCallback implements RawInputEvent.KeyMappingStateChange, ClientTickEvents.EndTick {
+
+    private static final long HOLD_TICKS = 5;
+
+    private long held = -1;
 
     private final PingablesModClient mod;
 
@@ -22,21 +30,47 @@ public final class PingKeyCallback implements ClientTickEvents.EndTick {
     }
 
     @Override
-    public void onEndTick(Minecraft client) {
-        if (client.screen != null) {
+    public void onStateChange(KeyMapping key, boolean down) {
+        if (key != PingablesKeyBindings.KEY_PING) {
             return;
         }
 
-        // TODO: Simple press = default ping, press and hold = wheel
-        if (PingablesKeyBindings.KEY_PING.isDown() && !mod.getPingTypeSelector().isVisible()) {
-            this.mod.getPingTypeSelector().setVisible(true);
-            client.mouseHandler.releaseMouse();
-        } else if (!PingablesKeyBindings.KEY_PING.isDown() && mod.getPingTypeSelector().isVisible()) {
-            IdentifiedLayerPingTypeSelector pingTypeSelector = mod.getPingTypeSelector();
-            pingTypeSelector.setVisible(false);
-            pingTypeSelector.getCurrentlyHoveredPingType().ifPresent(pingType -> dispatchPing(client, pingType));
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.screen != null) {
+            this.held = -1;
+            return;
+        }
 
-            client.mouseHandler.grabMouse();
+        if (down) {
+            this.held = 0;
+        } if (!down) {
+            boolean instantlyPing = (held < HOLD_TICKS);
+
+            if (instantlyPing) {
+                minecraft.level.registryAccess().lookupOrThrow(PingablesRegistries.PING_TYPE).get(PingTypes.GO_THERE).ifPresent(pingType -> dispatchPing(minecraft, pingType));
+            } else if (mod.getPingTypeSelector().isVisible()) {
+                IdentifiedLayerPingTypeSelector pingTypeSelector = mod.getPingTypeSelector();
+                pingTypeSelector.setVisible(false);
+                pingTypeSelector.getCurrentlyHoveredPingType().ifPresent(pingType -> dispatchPing(minecraft, pingType));
+
+                minecraft.mouseHandler.grabMouse();
+            }
+
+            this.held = -1;
+        }
+    }
+
+    @Override
+    public void onEndTick(Minecraft minecraft) {
+        if (held < 0) {
+            return;
+        }
+
+        this.held++;
+
+        if (held >= HOLD_TICKS && !mod.getPingTypeSelector().isVisible()) {
+            this.mod.getPingTypeSelector().setVisible(true);
+            minecraft.mouseHandler.releaseMouse();
         }
     }
 

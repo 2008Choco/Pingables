@@ -10,6 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 import wtf.choco.pingables.PingablesMod;
 import wtf.choco.pingables.client.PingablesModClient;
+import wtf.choco.pingables.client.event.RawInputEvent;
 
 public final class PingablesKeyBindings {
 
@@ -23,7 +24,9 @@ public final class PingablesKeyBindings {
     private PingablesKeyBindings() { }
 
     public static void bootstrap(PingablesModClient mod) {
-        ClientTickEvents.END_CLIENT_TICK.register(new PingKeyCallback(mod));
+        PingKeyCallback pingKeyCallback = new PingKeyCallback(mod);
+        ClientTickEvents.END_CLIENT_TICK.register(pingKeyCallback);
+        RawInputEvent.KEY_MAPPING_STATE_CHANGE.register(pingKeyCallback);
     }
 
 }

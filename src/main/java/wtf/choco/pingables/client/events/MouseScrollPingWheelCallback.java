@@ -1,10 +1,10 @@
 package wtf.choco.pingables.client.events;
 
 import wtf.choco.pingables.client.PingablesModClient;
-import wtf.choco.pingables.client.event.MouseEvent;
+import wtf.choco.pingables.client.event.RawInputEvent;
 import wtf.choco.pingables.client.render.IdentifiedLayerPingTypeSelector;
 
-public final class MouseScrollPingWheelCallback implements MouseEvent.MouseScroll {
+public final class MouseScrollPingWheelCallback implements RawInputEvent.MouseScroll {
 
     private final PingablesModClient mod;
 
