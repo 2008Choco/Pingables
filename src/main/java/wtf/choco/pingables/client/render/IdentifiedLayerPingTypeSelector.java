@@ -116,10 +116,12 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
             graphics.drawString(minecraft.font, text, x, y, 0xFFFFFFFF);
         }
 
-        Component text = Component.literal("Page: " + NumberFormat.getIntegerInstance().format(page + 1) + "/" + NumberFormat.getIntegerInstance().format(maxPage + 1));
-        int x = Mth.floor(centerX - (minecraft.font.width(text) / 2));
-        int y = Mth.floor(centerY - WHEEL_OUTER_RADIUS - (minecraft.font.lineHeight * 2));
-        graphics.drawString(minecraft.font, text, x, y, 0xFFFFFFFF);
+        if (maxPage > 0) {
+            Component text = Component.literal("Page: " + NumberFormat.getIntegerInstance().format(page + 1) + "/" + NumberFormat.getIntegerInstance().format(maxPage + 1));
+            int x = Mth.floor(centerX - (minecraft.font.width(text) / 2));
+            int y = Mth.floor(centerY - WHEEL_OUTER_RADIUS - (minecraft.font.lineHeight * 2));
+            graphics.drawString(minecraft.font, text, x, y, 0xFFFFFFFF);
+        }
 
         Profiler.get().pop();
 
