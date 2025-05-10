@@ -1,5 +1,6 @@
 package wtf.choco.pingables.client;
 
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 
 import wtf.choco.pingables.PingablesMod;
@@ -10,11 +11,12 @@ import wtf.choco.pingables.client.gui.PingablesIdentifiedLayers;
 import wtf.choco.pingables.client.input.PingablesKeyBindings;
 import wtf.choco.pingables.client.network.ClientboundPayloadHandler;
 
-public final class PingablesModClient extends PingablesMod {
+public final class PingablesModClient extends PingablesMod implements ClientModInitializer {
 
     private final PingablesIdentifiedLayers layers = new PingablesIdentifiedLayers(this);
 
-    public void initClient() {
+    @Override
+    public void onInitializeClient() {
         // Bootstrap
         PingablesKeyBindings.bootstrap(this);
         this.layers.bootstrap();

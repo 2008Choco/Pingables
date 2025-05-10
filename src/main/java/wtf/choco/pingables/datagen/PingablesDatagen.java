@@ -8,7 +8,7 @@ import net.minecraft.core.RegistrySetBuilder;
 import wtf.choco.pingables.ping.PingTypes;
 import wtf.choco.pingables.registry.PingablesRegistries;
 
-public final class PingablesEntryPointDatagen implements DataGeneratorEntrypoint {
+public final class PingablesDatagen implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator generator) {

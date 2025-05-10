@@ -12,13 +12,13 @@
     "environment": "*",
     "entrypoints": {
         "fabric-datagen": [
-            "wtf.choco.pingables.datagen.PingablesEntryPointDatagen"
+            "wtf.choco.pingables.datagen.PingablesDatagen"
         ],
         "main": [
-            "wtf.choco.pingables.PingablesEntryPointCommon"
+            "wtf.choco.pingables.PingablesMod"
         ],
         "client": [
-            "wtf.choco.pingables.client.PingablesEntryPointClient"
+            "wtf.choco.pingables.client.PingablesModClient"
         ]
     },
     "mixins": [
