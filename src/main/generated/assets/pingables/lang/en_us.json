@@ -1,4 +1,6 @@
 {
+  "key.categories.pingables": "Pingables",
+  "key.pingables.ping": "Ping",
   "ping_type.pingables.go_there": "Go There",
   "ping_type.pingables.home": "Home"
 }

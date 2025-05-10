@@ -8,6 +8,7 @@ import net.minecraft.Util;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.resources.ResourceKey;
 
+import wtf.choco.pingables.client.input.PingablesKeyBindings;
 import wtf.choco.pingables.ping.PingType;
 import wtf.choco.pingables.ping.PingTypes;
 
@@ -21,6 +22,9 @@ public final class PingablesLanguageProvider extends FabricLanguageProvider {
     public void generateTranslations(Provider registryLookup, TranslationBuilder builder) {
         this.addPingType(builder, PingTypes.GO_THERE, "Go There");
         this.addPingType(builder, PingTypes.HOME, "Home");
+
+        builder.add(PingablesKeyBindings.CATEGORY_PINGABLES, "Pingables");
+        builder.add(PingablesKeyBindings.KEY_PING.getName(), "Ping");
     }
 
     private void addPingType(TranslationBuilder builder, ResourceKey<PingType> key, String name) {

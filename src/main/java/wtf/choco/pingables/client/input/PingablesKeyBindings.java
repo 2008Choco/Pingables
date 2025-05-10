@@ -14,11 +14,13 @@ import wtf.choco.pingables.client.event.RawInputEvent;
 
 public final class PingablesKeyBindings {
 
+    public static final String CATEGORY_PINGABLES = "key.categories." + PingablesMod.MODID;
+
     public static final KeyMapping KEY_PING = KeyBindingHelper.registerKeyBinding(new KeyMapping(
             "key." + PingablesMod.MODID + ".ping",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_GRAVE_ACCENT,
-            "category." + PingablesMod.MODID + ".ping"
+            CATEGORY_PINGABLES
     ));
 
     private PingablesKeyBindings() { }
