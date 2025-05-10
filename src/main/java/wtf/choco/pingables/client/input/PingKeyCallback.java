@@ -10,7 +10,7 @@ import net.minecraft.world.phys.HitResult;
 import wtf.choco.pingables.PingUtil;
 import wtf.choco.pingables.client.PingablesModClient;
 import wtf.choco.pingables.client.event.RawInputEvent;
-import wtf.choco.pingables.client.render.IdentifiedLayerPingTypeSelector;
+import wtf.choco.pingables.client.gui.PingTypeSelectorWheel;
 import wtf.choco.pingables.network.payload.serverbound.ServerboundPingPayload;
 import wtf.choco.pingables.ping.PingType;
 import wtf.choco.pingables.ping.PingTypes;
@@ -45,14 +45,13 @@ public final class PingKeyCallback implements RawInputEvent.KeyMappingStateChang
             this.held = 0;
         } if (!down) {
             boolean instantlyPing = (held < HOLD_TICKS);
+            PingTypeSelectorWheel selector = mod.getLayers().getPingTypeSelectorWheel();
 
             if (instantlyPing) {
                 minecraft.level.registryAccess().lookupOrThrow(PingablesRegistries.PING_TYPE).get(PingTypes.GO_THERE).ifPresent(pingType -> dispatchPing(minecraft, pingType));
-            } else if (mod.getPingTypeSelector().isVisible()) {
-                IdentifiedLayerPingTypeSelector pingTypeSelector = mod.getPingTypeSelector();
-                pingTypeSelector.setVisible(false);
-                pingTypeSelector.getCurrentlyHoveredPingType().ifPresent(pingType -> dispatchPing(minecraft, pingType));
-
+            } else if (selector.isVisible()) {
+                selector.setVisible(false);
+                selector.getCurrentlyHoveredPingType().ifPresent(pingType -> dispatchPing(minecraft, pingType));
                 minecraft.mouseHandler.grabMouse();
             }
 
@@ -67,9 +66,13 @@ public final class PingKeyCallback implements RawInputEvent.KeyMappingStateChang
         }
 
         this.held++;
+        if (held < HOLD_TICKS) {
+            return;
+        }
 
-        if (held >= HOLD_TICKS && !mod.getPingTypeSelector().isVisible()) {
-            this.mod.getPingTypeSelector().setVisible(true);
+        PingTypeSelectorWheel selector = mod.getLayers().getPingTypeSelectorWheel();
+        if (!selector.isVisible()) {
+            selector.setVisible(true);
             minecraft.mouseHandler.releaseMouse();
         }
     }

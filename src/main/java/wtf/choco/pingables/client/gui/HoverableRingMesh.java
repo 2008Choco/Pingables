@@ -1,4 +1,4 @@
-package wtf.choco.pingables.client.render;
+package wtf.choco.pingables.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -10,7 +10,9 @@ import net.minecraft.util.Mth;
 
 import org.joml.Matrix4f;
 
-public final class HoverableRingWheelMesh {
+import wtf.choco.pingables.client.render.PingablesRenderTypes;
+
+final class HoverableRingMesh {
 
     private static final int COORDINATES_PER_VERTEX = 2;
     private static final float DEFAULT_OPACITY = 0.5F;
@@ -26,7 +28,7 @@ public final class HoverableRingWheelMesh {
     private final int segmentColor;
     private final int segmentHoverColor;
 
-    public HoverableRingWheelMesh(int resolution, float theta, float innerRadius, float outerRadius, int trueSegmentCount, int segmentColor, int segmentHoverColor) {
+    public HoverableRingMesh(int resolution, float theta, float innerRadius, float outerRadius, int trueSegmentCount, int segmentColor, int segmentHoverColor) {
         this.resolution = resolution;
         this.theta = theta;
         this.innerRadius = innerRadius;

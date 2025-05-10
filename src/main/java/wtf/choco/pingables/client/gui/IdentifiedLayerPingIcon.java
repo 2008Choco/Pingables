@@ -1,4 +1,4 @@
-package wtf.choco.pingables.client.render;
+package wtf.choco.pingables.client.gui;
 
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.Camera;

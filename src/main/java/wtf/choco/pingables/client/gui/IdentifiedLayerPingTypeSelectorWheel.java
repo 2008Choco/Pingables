@@ -1,4 +1,4 @@
-package wtf.choco.pingables.client.render;
+package wtf.choco.pingables.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -22,7 +22,7 @@ import org.spongepowered.include.com.google.common.base.Preconditions;
 import wtf.choco.pingables.ping.PingType;
 import wtf.choco.pingables.registry.PingablesRegistries;
 
-public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
+public final class IdentifiedLayerPingTypeSelectorWheel implements IdentifiedLayer, PingTypeSelectorWheel {
 
     private static final int PING_TYPE_ICON_SIZE = 18;
     private static final int HOVERED_PING_TYPE_ICON_SIZE = 22;
@@ -39,7 +39,7 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
     private static final float WHEEL_INNER_RADIUS_SQUARED = Mth.square(WHEEL_INNER_RADIUS);
     private static final float WHEEL_OUTER_RADIUS_SQUARED = Mth.square(WHEEL_OUTER_RADIUS);
 
-    private static final HoverableRingWheelMesh WHEEL_MESH = new HoverableRingWheelMesh(
+    private static final HoverableRingMesh WHEEL_MESH = new HoverableRingMesh(
             WHEEL_RESOLUTION,
             WHEEL_THETA,
             WHEEL_INNER_RADIUS,
@@ -130,9 +130,10 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
 
     @Override
     public ResourceLocation id() {
-        return PingablesIdentifiedLayers.PING_TYPE_SELECTOR;
+        return PingablesIdentifiedLayers.PING_TYPE_SELECTOR_WHEEL;
     }
 
+    @Override
     public void setVisible(boolean visible) {
         this.visible = visible;
         if (visible) {
@@ -140,17 +141,25 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
         }
     }
 
+    @Override
     public boolean isVisible() {
         return visible;
     }
 
+    @Override
     public void setPage(int page) {
         Preconditions.checkArgument(page >= 0 && page <= maxPage, "page must be between 0 and maxPage (%s), inclusive", maxPage);
         this.page = page;
     }
 
+    @Override
     public int getPage() {
         return page;
+    }
+
+    @Override
+    public int getMaxPage() {
+        return maxPage;
     }
 
     private void updateMaxPage(Registry<PingType> registry) {
@@ -158,10 +167,7 @@ public final class IdentifiedLayerPingTypeSelector implements IdentifiedLayer {
         this.page = Mth.clamp(page, 0, maxPage);
     }
 
-    public int getMaxPage() {
-        return maxPage;
-    }
-
+    @Override
     public Optional<Holder<PingType>> getCurrentlyHoveredPingType() {
         return Optional.ofNullable(currentlyHoveredPingType);
     }

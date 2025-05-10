@@ -2,7 +2,7 @@ package wtf.choco.pingables.client.events;
 
 import wtf.choco.pingables.client.PingablesModClient;
 import wtf.choco.pingables.client.event.RawInputEvent;
-import wtf.choco.pingables.client.render.IdentifiedLayerPingTypeSelector;
+import wtf.choco.pingables.client.gui.PingTypeSelectorWheel;
 
 public final class MouseScrollPingWheelCallback implements RawInputEvent.MouseScroll {
 
@@ -14,7 +14,7 @@ public final class MouseScrollPingWheelCallback implements RawInputEvent.MouseSc
 
     @Override
     public boolean onMouseScroll(int horizontalScroll, int verticalScroll) {
-        IdentifiedLayerPingTypeSelector selector = mod.getPingTypeSelector();
+        PingTypeSelectorWheel selector = mod.getLayers().getPingTypeSelectorWheel();
         if (!selector.isVisible()) {
             return true;
         }
