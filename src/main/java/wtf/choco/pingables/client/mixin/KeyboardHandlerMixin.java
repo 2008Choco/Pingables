@@ -16,7 +16,7 @@ public class KeyboardHandlerMixin {
 
     @Redirect(
             method = "keyPress(JIIII)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;set")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;set(Lcom/mojang/blaze3d/platform/InputConstants$Key;Z)V")
     )
     private static void set(Key key, boolean down) {
         KeyMapping mapping = KeyMappingAccessor.getMap().get(key);
