@@ -18,12 +18,12 @@ public final class PingablesModClient extends PingablesMod {
     private final IdentifiedLayerPingTypeSelector pingTypeSelector = new IdentifiedLayerPingTypeSelector();
 
     public void initClient() {
-        // Bootstrap keybindings
+        // Bootstrap
         PingablesKeyBindings.bootstrap(this);
 
-        // Register network handlers
-        ClientboundPayloadHandler payloadListener = new ClientboundPayloadHandler(this);
-        payloadListener.registerIncomingHandlers();
+        // Network
+        ClientboundPayloadHandler clientboundPayloadHandler = new ClientboundPayloadHandler(this);
+        clientboundPayloadHandler.registerHandlers();
 
         this.attachHudLayers();
 

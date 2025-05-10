@@ -15,7 +15,7 @@ public final class ClientboundPayloadHandler {
         this.mod = mod;
     }
 
-    public void registerIncomingHandlers() {
+    public void registerHandlers() {
         ClientPlayNetworking.registerGlobalReceiver(ClientboundSetPingPayload.TYPE, this::onSetPing);
         ClientPlayNetworking.registerGlobalReceiver(ClientboundRemovePingPayload.TYPE, this::onRemovePing);
     }

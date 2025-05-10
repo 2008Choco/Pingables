@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import wtf.choco.pingables.events.DisconnectFromServerCallback;
+import wtf.choco.pingables.network.PingablesProtocol;
 import wtf.choco.pingables.network.ServerboundPayloadHandler;
 import wtf.choco.pingables.ping.PingTracker;
 import wtf.choco.pingables.registry.PingablesRegistries;
@@ -23,12 +24,13 @@ public class PingablesMod {
     }
 
     public void initCommon() {
-        // Bootstrap registries
+        // Bootstrap
         PingablesRegistries.bootstrap();
+        PingablesProtocol.bootstrap();
 
-        // Register network handlers
-        ServerboundPayloadHandler payloadListener = new ServerboundPayloadHandler(this);
-        payloadListener.registerPayloads();
+        // Network
+        ServerboundPayloadHandler serverboundPayloadHandler = new ServerboundPayloadHandler(this);
+        serverboundPayloadHandler.registerHandlers();
 
         // Register server-sided event callbacks
         ServerTickEvents.END_SERVER_TICK.register(pingTracker::tickServer);
