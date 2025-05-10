@@ -2,5 +2,5 @@
   "name": {
     "translate": "ping_type.pingables.go_there"
   },
-  "texture_location": "pingables:icons/go_there.png"
+  "texture_location": "pingables:textures/ping_type/go_there.png"
 }

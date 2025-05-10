@@ -24,7 +24,8 @@ public final class PingTypes {
     }
 
     private static PingType create(ResourceKey<PingType> key) {
-        ResourceLocation textureLocation = ResourceLocation.tryBuild(PingablesMod.MODID, "icons/" + key.location().getPath() + ".png");
+        // TODO: It would be nice to stitch ping type textures into a TextureAtlas and reference them as just "namespace:ping_key" instead
+        ResourceLocation textureLocation = ResourceLocation.tryBuild(PingablesMod.MODID, "textures/ping_type/" + key.location().getPath() + ".png");
         return PingType.builder()
                 .textureLocation(textureLocation)
                 .name(Component.translatable(Util.makeDescriptionId("ping_type", key.location())))

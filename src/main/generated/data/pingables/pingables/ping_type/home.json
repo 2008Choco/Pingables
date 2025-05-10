@@ -2,5 +2,5 @@
   "name": {
     "translate": "ping_type.pingables.home"
   },
-  "texture_location": "pingables:icons/home.png"
+  "texture_location": "pingables:textures/ping_type/home.png"
 }
