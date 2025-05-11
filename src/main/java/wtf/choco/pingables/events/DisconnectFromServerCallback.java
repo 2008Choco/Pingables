@@ -1,5 +1,7 @@
 package wtf.choco.pingables.events;
 
+import java.util.UUID;
+
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -19,14 +21,15 @@ public class DisconnectFromServerCallback implements ServerPlayConnectionEvents.
     }
 
     @Override
-    public void onPlayDisconnect(ServerGamePacketListenerImpl handler, MinecraftServer server) {
-        if (!mod.getPingTracker().removePing(handler.getOwner().getId())) {
+    public void onPlayDisconnect(ServerGamePacketListenerImpl listener, MinecraftServer server) {
+        UUID playerUUID = listener.getPlayer().getUUID();
+        if (!mod.getPingTracker().removePing(playerUUID)) {
             return;
         }
 
-        ClientboundRemovePingPayload payload = new ClientboundRemovePingPayload(handler.getOwner().getId());
-        for (ServerPlayer player : PlayerLookup.all(server)) {
-            ServerPlayNetworking.send(player, payload);
+        ClientboundRemovePingPayload payload = new ClientboundRemovePingPayload(playerUUID);
+        for (ServerPlayer receiver : PlayerLookup.all(server)) {
+            ServerPlayNetworking.send(receiver, payload);
         }
     }
 

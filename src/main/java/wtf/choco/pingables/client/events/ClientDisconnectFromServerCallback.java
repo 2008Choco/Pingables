@@ -15,7 +15,7 @@ public final class ClientDisconnectFromServerCallback implements ClientPlayConne
     }
 
     @Override
-    public void onPlayDisconnect(ClientPacketListener handler, Minecraft client) {
+    public void onPlayDisconnect(ClientPacketListener listener, Minecraft client) {
         this.mod.getPingTracker().clearPings();
     }
 
