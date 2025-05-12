@@ -1,5 +1,6 @@
 package wtf.choco.pingables.ping;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import com.mojang.serialization.Codec;
 
@@ -30,6 +31,10 @@ public final record PingTypeFilter(List<ResourceLocation> pingTypes) implements 
             PingTypeFilter::new,
             PingTypeFilter::pingTypes
     );
+
+    public PingTypeFilter {
+        pingTypes = ImmutableList.copyOf(pingTypes);
+    }
 
     public int getIndex(ResourceLocation location) {
         return pingTypes.indexOf(location);
