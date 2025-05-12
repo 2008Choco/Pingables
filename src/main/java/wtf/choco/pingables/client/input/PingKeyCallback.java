@@ -1,10 +1,16 @@
 package wtf.choco.pingables.client.input;
 
+import java.util.List;
+import java.util.Optional;
+
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.HitResult;
 
 import wtf.choco.pingables.PingUtil;
@@ -13,7 +19,7 @@ import wtf.choco.pingables.client.event.RawInputEvent;
 import wtf.choco.pingables.client.gui.PingTypeSelectorWheel;
 import wtf.choco.pingables.network.payload.serverbound.ServerboundPingPayload;
 import wtf.choco.pingables.ping.PingType;
-import wtf.choco.pingables.ping.PingTypes;
+import wtf.choco.pingables.ping.PingTypeFilter;
 import wtf.choco.pingables.ping.PositionedPing;
 import wtf.choco.pingables.registry.PingablesRegistries;
 
@@ -48,7 +54,7 @@ public final class PingKeyCallback implements RawInputEvent.KeyMappingStateChang
             PingTypeSelectorWheel selector = mod.getLayers().getPingTypeSelectorWheel();
 
             if (instantlyPing) {
-                minecraft.level.registryAccess().lookupOrThrow(PingablesRegistries.PING_TYPE).get(PingTypes.GO_THERE).ifPresent(pingType -> dispatchPing(minecraft, pingType));
+                this.getFirstPingType(minecraft.level.registryAccess()).ifPresent(pingType -> dispatchPing(minecraft, pingType));
             } else if (selector.isVisible()) {
                 selector.setVisible(false);
                 selector.getCurrentlyHoveredPingType().ifPresent(pingType -> dispatchPing(minecraft, pingType));
@@ -86,6 +92,18 @@ public final class PingKeyCallback implements RawInputEvent.KeyMappingStateChang
         PositionedPing ping = new PositionedPing(pingType, targetPosition.getLocation(), client.player.getUUID(), System.currentTimeMillis());
         this.mod.getPingTracker().addPing(ping);
         ClientPlayNetworking.send(new ServerboundPingPayload(pingType));
+    }
+
+    private Optional<? extends Holder<PingType>> getFirstPingType(RegistryAccess registryAccess) {
+        Registry<PingType> registry = registryAccess.lookupOrThrow(PingablesRegistries.PING_TYPE);
+        PingTypeFilter filter = mod.getPingTypeFilter();
+
+        if (filter != null) {
+            List<ResourceLocation> pingTypes = filter.pingTypes();
+            return (pingTypes.size() > 0) ? registry.get(pingTypes.get(0)) : Optional.empty();
+        }
+
+        return (registry.size() > 0) ? registry.get(0) : Optional.empty();
     }
 
 }
