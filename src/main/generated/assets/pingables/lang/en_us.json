@@ -2,5 +2,6 @@
   "key.categories.pingables": "Pingables",
   "key.pingables.ping": "Ping",
   "ping_type.pingables.go_there": "Go There",
-  "ping_type.pingables.home": "Home"
+  "ping_type.pingables.home": "Home",
+  "pingables.error.invalid_ping_type": "Sent invalid PingType: %s"
 }

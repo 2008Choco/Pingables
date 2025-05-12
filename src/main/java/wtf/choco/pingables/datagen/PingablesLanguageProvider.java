@@ -25,6 +25,8 @@ public final class PingablesLanguageProvider extends FabricLanguageProvider {
 
         builder.add(PingablesKeyBindings.CATEGORY_PINGABLES, "Pingables");
         builder.add(PingablesKeyBindings.KEY_PING.getName(), "Ping");
+
+        builder.add("pingables.error.invalid_ping_type", "Sent invalid PingType: %s");
     }
 
     private void addPingType(TranslationBuilder builder, ResourceKey<PingType> key, String name) {

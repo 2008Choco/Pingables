@@ -17,7 +17,7 @@ public final class PingablesIdentifiedLayers {
 
     public PingablesIdentifiedLayers(PingablesModClient mod) {
         this.mod = mod;
-        this.pingTypeSelectorWheel = new IdentifiedLayerPingTypeSelectorWheel();
+        this.pingTypeSelectorWheel = new IdentifiedLayerPingTypeSelectorWheel(mod);
     }
 
     public void bootstrap() {

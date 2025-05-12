@@ -1,9 +1,12 @@
 package wtf.choco.pingables.client.gui;
 
+import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.DeltaTracker;
@@ -13,13 +16,14 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.Profiler;
 
-import org.spongepowered.include.com.google.common.base.Preconditions;
-
+import wtf.choco.pingables.client.PingablesModClient;
 import wtf.choco.pingables.ping.PingType;
+import wtf.choco.pingables.ping.PingTypeFilter;
 import wtf.choco.pingables.registry.PingablesRegistries;
 
 public final class IdentifiedLayerPingTypeSelectorWheel implements IdentifiedLayer, PingTypeSelectorWheel {
@@ -54,6 +58,12 @@ public final class IdentifiedLayerPingTypeSelectorWheel implements IdentifiedLay
     private int maxPage = 0;
     private Holder<PingType> currentlyHoveredPingType = null;
 
+    private final PingablesModClient mod;
+
+    public IdentifiedLayerPingTypeSelectorWheel(PingablesModClient mod) {
+        this.mod = mod;
+    }
+
     @Override
     public void render(GuiGraphics graphics, DeltaTracker delta) {
         if (!visible) {
@@ -84,14 +94,22 @@ public final class IdentifiedLayerPingTypeSelectorWheel implements IdentifiedLay
         });
 
         Registry<PingType> registry = minecraft.level.registryAccess().lookupOrThrow(PingablesRegistries.PING_TYPE);
-        this.updateMaxPage(registry);
+        Stream<ResourceKey<PingType>> keyStream = registry.listElementIds();
 
-        int maxIterations = Math.min(PING_TYPES_PER_PAGE, registry.size());
+        PingTypeFilter filter = mod.getPingTypeFilter();
+        if (filter != null) {
+            keyStream = keyStream.filter(filter).sorted(filter);
+        }
+
+        List<ResourceKey<PingType>> keys = keyStream.toList();
+        this.updateMaxPage(keys.size());
+
+        int maxIterations = Math.min(PING_TYPES_PER_PAGE, keys.size());
         PingType currentlyHoveredPingType = null;
 
         for (int i = 0; i < maxIterations; i++) {
             int pageOffset = (page * PING_TYPES_PER_PAGE);
-            PingType pingType = registry.byId(i + pageOffset);
+            PingType pingType = registry.getValue(keys.get(i + pageOffset));
             if (pingType == null) {
                 break;
             }
@@ -162,8 +180,8 @@ public final class IdentifiedLayerPingTypeSelectorWheel implements IdentifiedLay
         return maxPage;
     }
 
-    private void updateMaxPage(Registry<PingType> registry) {
-        this.maxPage = Math.max((registry.size() - 1) / PING_TYPES_PER_PAGE, 0);
+    private void updateMaxPage(int size) {
+        this.maxPage = Math.max((size - 1) / PING_TYPES_PER_PAGE, 0);
         this.page = Mth.clamp(page, 0, maxPage);
     }
 
